@@ -5,39 +5,39 @@ export default class Game {
   lines = 0;
   level = 0;
   playfield = PLAYFIELD;
-  activePiece = {
-    blocks: T,
+  activeTetromino = {
+    matrix: T,
     x: 0,
     y: 0,
   };
 
-  movePieceLeft() {
-    this.activePiece.x -= 1;
-    this.hasCollision() && (this.activePiece.x += 1);
+  moveTetrominoLeft() {
+    this.activeTetromino.x -= 1;
+    this.hasCollision() && (this.activeTetromino.x += 1);
   }
 
-  movePieceRight() {
-    this.activePiece.x += 1;
-    this.hasCollision() && (this.activePiece.x -= 1);
+  moveTetrominoRight() {
+    this.activeTetromino.x += 1;
+    this.hasCollision() && (this.activeTetromino.x -= 1);
   }
 
-  movePieceDown() {
-    this.activePiece.y += 1;
+  moveTetrominoDown() {
+    this.activeTetromino.y += 1;
 
     if (this.hasCollision()) {
-      this.activePiece.y -= 1;
-      this.lockPiece();
+      this.activeTetromino.y -= 1;
+      this.lockTetromino();
     }
   }
 
   hasCollision() {
-    const { x, y, blocks } = this.activePiece;
+    const { x, y, matrix } = this.activeTetromino;
     const playfield = this.playfield;
 
-    for (let i = 0; i < blocks.length; i++) {
-      for (let j = 0; j < blocks[i].length; j++) {
+    for (let i = 0; i < matrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
         if (
-          blocks[i][j] && // если значение в матрице тетромино не равно нулю,
+          matrix[i][j] && // если значение в матрице тетромино не равно нулю,
           (playfield[y + i] === undefined || // ..в поле есть значение с нужным индексом..
             playfield[y + i][x + j] === undefined ||
             playfield[y + i][x + j]) // ..и если значение в поле не равно 0..
@@ -49,15 +49,15 @@ export default class Game {
     return false; // в противном случае возвращаем false - столкновения нет
   }
 
-  lockPiece() {
-    const { x, y, blocks } = this.activePiece;
+  lockTetromino() {
+    const { x, y, matrix } = this.activeTetromino;
     const playfield = this.playfield;
 
-    for (let i = 0; i < blocks.length; i++) {
-      for (let j = 0; j < blocks[i].length; j++) {
-        if (blocks[i][j]) {
+    for (let i = 0; i < matrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
+        if (matrix[i][j]) {
           // если значение в матрице тетромино не равно нулю
-          playfield[y + i][x + j] = blocks[i][j]; // присваеваем нужные значения в поле
+          playfield[y + i][x + j] = matrix[i][j]; // присваеваем нужные значения в поле
         }
       }
     }
