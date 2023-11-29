@@ -1,0 +1,8 @@
+@font-face {
+  font-family: "Nintendo DS BIOS";
+  font-style: normal;
+  font-weight: 400;
+  src:
+  url("../../fonts/Nintendo\ DS\ BIOS\ Regular.woff2") format("woff2"),
+  url("../../fonts/Nintendo\ DS\ BIOS\ Regular.woff") format("woff");
+}
