@@ -18,6 +18,7 @@ export default class Game {
 
   moveTetrominoRight() {
     this.activeTetromino.x += 1;
+    console.log(this.activeTetromino);
     this.hasCollision() && (this.activeTetromino.x -= 1);
   }
 
@@ -60,6 +61,25 @@ export default class Game {
           playfield[y + i][x + j] = matrix[i][j]; // присваеваем нужные значения в поле
         }
       }
+    }
+  }
+
+  rotateMatrix() {
+    const { matrix } = this.activeTetromino;
+    const length = matrix.length;
+    const rotatedMatrix = [];
+
+    for (let i = 0; i < length; i++) {
+      rotatedMatrix[i] = [];
+      for (let j = 0; j < length; j++) {
+        rotatedMatrix[i][j] = matrix[length - j - 1][i];
+      }
+    }
+
+    this.activeTetromino.matrix = rotatedMatrix;
+
+    if (this.hasCollision()) {
+      this.activeTetromino.matrix = matrix;
     }
   }
 }
