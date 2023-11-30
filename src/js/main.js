@@ -5,7 +5,7 @@ import View from "./components/view.js";
 const rootElement = document.querySelector("#root");
 
 const game = new Game();
-const view = new View(rootElement, 320, 640, 20, 10);
+const view = new View(rootElement, 480, 640, 20, 10);
 
 window.game = game;
 window.view = view;

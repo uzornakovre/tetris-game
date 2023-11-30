@@ -37,6 +37,10 @@ export default class Game {
 
     return {
       playfield,
+      score: this.score,
+      level: this.level,
+      lines: this.lines,
+      nextTetromino: this.nextTetromino,
     };
   }
 
