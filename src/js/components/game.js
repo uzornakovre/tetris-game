@@ -1,15 +1,10 @@
-import { T } from "../../utils/constants";
-
 export default class Game {
   score = 0;
   lines = 0;
   level = 0;
   playfield = this.createPlayField();
-  activeTetromino = {
-    matrix: T,
-    x: 0,
-    y: 0,
-  };
+  activeTetromino = this.createTetromino();
+  nextTetromino = this.createTetromino();
 
   getState() {
     const playfield = this.createPlayField();
@@ -47,6 +42,72 @@ export default class Game {
     return playfield;
   }
 
+  createTetromino() {
+    const index = Math.floor(Math.random() * 7);
+    const type = "IJLOSTZ"[index];
+    const tetromino = {};
+
+    switch (type) {
+      case "I":
+        tetromino.matrix = [
+          [0, 0, 0, 0],
+          [1, 1, 1, 1],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+        ];
+        break;
+      case "J":
+        tetromino.matrix = [
+          [0, 0, 0],
+          [2, 2, 2],
+          [0, 0, 2],
+        ];
+        break;
+      case "L":
+        tetromino.matrix = [
+          [0, 0, 0],
+          [3, 3, 3],
+          [3, 0, 0],
+        ];
+        break;
+      case "O":
+        tetromino.matrix = [
+          [0, 0, 0, 0],
+          [0, 4, 4, 0],
+          [0, 4, 4, 0],
+          [0, 0, 0, 0],
+        ];
+        break;
+      case "S":
+        tetromino.matrix = [
+          [0, 0, 0],
+          [0, 5, 5],
+          [5, 5, 0],
+        ];
+        break;
+      case "T":
+        tetromino.matrix = [
+          [0, 0, 0],
+          [0, 6, 0],
+          [6, 6, 6],
+        ];
+        break;
+      case "Z":
+        tetromino.matrix = [
+          [0, 0, 0],
+          [7, 7, 0],
+          [0, 7, 7],
+        ];
+        break;
+      default:
+        throw new Error("Unknown tetromino type");
+    }
+
+    tetromino.x = Math.floor((10 - tetromino.matrix[0].length) / 2);
+    tetromino.y = -1;
+    return tetromino;
+  }
+
   moveTetrominoLeft() {
     this.activeTetromino.x -= 1;
     this.hasCollision() && (this.activeTetromino.x += 1);
@@ -54,7 +115,6 @@ export default class Game {
 
   moveTetrominoRight() {
     this.activeTetromino.x += 1;
-    console.log(this.activeTetromino);
     this.hasCollision() && (this.activeTetromino.x -= 1);
   }
 
@@ -64,6 +124,7 @@ export default class Game {
     if (this.hasCollision()) {
       this.activeTetromino.y -= 1;
       this.lockTetromino();
+      this.updateTetrominos();
     }
   }
 
@@ -117,5 +178,10 @@ export default class Game {
     if (this.hasCollision()) {
       this.activeTetromino.matrix = matrix;
     }
+  }
+
+  updateTetrominos() {
+    this.activeTetromino = this.nextTetromino;
+    this.nextTetromino = this.createTetromino();
   }
 }

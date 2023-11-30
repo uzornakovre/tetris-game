@@ -1,4 +1,13 @@
 export default class View {
+  static colors = {
+    1: "blue",
+    2: "grey",
+    3: "green",
+    4: "violet",
+    5: "brown",
+    6: "red",
+    7: "darkred",
+  };
   constructor(element, width, height, rows, columns) {
     this.element = element;
     this.width = width;
@@ -10,8 +19,8 @@ export default class View {
     this.canvas.className = "game__playfield";
     this.ctx = this.canvas.getContext("2d");
 
-    this.tetrominoWidth = this.width / columns;
-    this.tetrominoHeight = this.height / rows;
+    this.blockWidth = this.width / columns;
+    this.blockHeight = this.height / rows;
 
     this.element.appendChild(this.canvas);
   }
@@ -29,22 +38,22 @@ export default class View {
     for (let y = 0; y < playfield.length; y++) {
       const line = playfield[y];
       for (let x = 0; x < line.length; x++) {
-        const tetromino = line[x];
+        const block = line[x];
 
-        if (tetromino) {
-          this.renderTetromino(
-            x * this.tetrominoWidth, // отступ по x
-            y * this.tetrominoHeight, // отступ по y
-            this.tetrominoWidth, // ширина блока
-            this.tetrominoHeight, // высота блока)
-            "red" // цвет блока
+        if (block) {
+          this.renderBlock(
+            x * this.blockWidth, // отступ по x
+            y * this.blockHeight, // отступ по y
+            this.blockWidth, // ширина блока
+            this.blockHeight, // высота блока)
+            View.colors[block] // цвет блока
           );
         }
       }
     }
   }
 
-  renderTetromino(x, y, width, height, color) {
+  renderBlock(x, y, width, height, color) {
     this.ctx.fillStyle = color; // цвет заливки
     this.ctx.strokeStyle = "yellow"; // цвет обводки
     this.ctx.lineWidth = 2; // ширина обводки
