@@ -1,10 +1,20 @@
 export default class Game {
+  static points = {
+    1: 50,
+    2: 100,
+    3: 500,
+    4: 1000,
+  };
+
   score = 0;
   lines = 0;
-  level = 0;
   playfield = this.createPlayField();
   activeTetromino = this.createTetromino();
   nextTetromino = this.createTetromino();
+
+  get level() {
+    return Math.floor(this.lines * 0.1);
+  }
 
   getState() {
     const playfield = this.createPlayField();
@@ -109,21 +119,23 @@ export default class Game {
   }
 
   moveTetrominoLeft() {
-    this.activeTetromino.x -= 1;
-    this.hasCollision() && (this.activeTetromino.x += 1);
+    this.activeTetromino.x--;
+    this.hasCollision() && this.activeTetromino.x++;
   }
 
   moveTetrominoRight() {
-    this.activeTetromino.x += 1;
-    this.hasCollision() && (this.activeTetromino.x -= 1);
+    this.activeTetromino.x++;
+    this.hasCollision() && this.activeTetromino.x--;
   }
 
   moveTetrominoDown() {
-    this.activeTetromino.y += 1;
+    this.activeTetromino.y++;
 
     if (this.hasCollision()) {
-      this.activeTetromino.y -= 1;
+      this.activeTetromino.y--;
       this.lockTetromino();
+      const clearedLines = this.clearLines();
+      this.updateScore(clearedLines);
       this.updateTetrominos();
     }
   }
@@ -161,6 +173,35 @@ export default class Game {
     }
   }
 
+  clearLines() {
+    const rows = 20;
+    const columns = 10;
+    let lines = [];
+
+    for (let i = rows - 1; i >= 0; i--) {
+      let numberOfBlocks = 0;
+      for (let j = 0; j < columns; j++) {
+        if (this.playfield[i][j]) {
+          numberOfBlocks++;
+        }
+      }
+      if (numberOfBlocks === 0) {
+        break;
+      } else if (numberOfBlocks < columns) {
+        continue;
+      } else if (numberOfBlocks === columns) {
+        lines.unshift(i);
+      }
+    }
+
+    for (let index of lines) {
+      this.playfield.splice(index, 1);
+      this.playfield.unshift(new Array(columns).fill(0));
+    }
+
+    return lines.length;
+  }
+
   rotateMatrix() {
     const { matrix } = this.activeTetromino;
     const length = matrix.length;
@@ -178,6 +219,15 @@ export default class Game {
     if (this.hasCollision()) {
       this.activeTetromino.matrix = matrix;
     }
+  }
+
+  updateScore(clearedLines) {
+    if (clearedLines > 0) {
+      this.score += Game.points[clearedLines] * this.level + 1;
+      this.lines += clearedLines;
+    }
+    console.log(this.score);
+    console.log(this.lines);
   }
 
   updateTetrominos() {
