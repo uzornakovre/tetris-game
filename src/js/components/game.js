@@ -1,15 +1,51 @@
-import { PLAYFIELD, T } from "../../utils/constants";
+import { T } from "../../utils/constants";
 
 export default class Game {
   score = 0;
   lines = 0;
   level = 0;
-  playfield = PLAYFIELD;
+  playfield = this.createPlayField();
   activeTetromino = {
     matrix: T,
     x: 0,
     y: 0,
   };
+
+  getState() {
+    const playfield = this.createPlayField();
+    const { x, y, matrix } = this.activeTetromino;
+
+    for (let i = 0; i < this.playfield.length; i++) {
+      playfield[i] = [];
+      for (let j = 0; j < this.playfield[i].length; j++) {
+        playfield[i][j] = this.playfield[i][j];
+      }
+    }
+
+    for (let i = 0; i < matrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
+        if (matrix[i][j]) {
+          playfield[y + i][x + j] = matrix[i][j];
+        }
+      }
+    }
+
+    return {
+      playfield,
+    };
+  }
+
+  createPlayField() {
+    const playfield = [];
+    for (let y = 0; y < 20; y++) {
+      playfield[y] = [];
+      for (let x = 0; x < 10; x++) {
+        playfield[y][x] = 0;
+      }
+    }
+
+    return playfield;
+  }
 
   moveTetrominoLeft() {
     this.activeTetromino.x -= 1;
