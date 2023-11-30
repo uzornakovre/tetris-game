@@ -6,14 +6,21 @@ export default class Game {
     4: 1000,
   };
 
-  score = 0;
-  lines = 0;
-  playfield = this.createPlayField();
-  activeTetromino = this.createTetromino();
-  nextTetromino = this.createTetromino();
+  constructor() {
+    this.reset();
+  }
 
   get level() {
     return Math.floor(this.lines * 0.1);
+  }
+
+  reset() {
+    this.score = 0;
+    this.lines = 0;
+    this.topOut = false;
+    this.playfield = this.createPlayField();
+    this.activeTetromino = this.createTetromino();
+    this.nextTetromino = this.createTetromino();
   }
 
   getState() {
@@ -41,6 +48,7 @@ export default class Game {
       level: this.level,
       lines: this.lines,
       nextTetromino: this.nextTetromino,
+      isGameOver: this.topOut,
     };
   }
 
@@ -133,6 +141,8 @@ export default class Game {
   }
 
   moveTetrominoDown() {
+    if (this.topOut) return;
+
     this.activeTetromino.y++;
 
     if (this.hasCollision()) {
@@ -142,6 +152,8 @@ export default class Game {
       this.updateScore(clearedLines);
       this.updateTetrominos();
     }
+
+    if (this.hasCollision()) this.topOut = true;
   }
 
   hasCollision() {
@@ -230,8 +242,6 @@ export default class Game {
       this.score += Game.points[clearedLines] * this.level + 1;
       this.lines += clearedLines;
     }
-    console.log(this.score);
-    console.log(this.lines);
   }
 
   updateTetrominos() {

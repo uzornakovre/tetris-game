@@ -1,5 +1,8 @@
-// .game {
-//   &__playfield {
-//     border: 2px solid yellow;
-//   }
-// }
+.game {
+  background-color: darkblue;
+  height: 640px;
+  width: 480px;
+  padding: 2px;
+  border: 2px solid yellow;
+  border-radius: 5px;
+}

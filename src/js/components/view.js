@@ -75,6 +75,11 @@ export default class View {
     this.ctx.textBaseline = "middle";
     this.ctx.fillText("GAME OVER", this.width / 2, this.height / 2 - 50);
     this.ctx.fillText(`Score: ${score}`, this.width / 2, this.height / 2);
+    this.ctx.fillText(
+      "Press ENTER to restart",
+      this.width / 2,
+      this.height / 2 + 50
+    );
   }
 
   clearPlayfield() {
@@ -110,9 +115,20 @@ export default class View {
     this.ctx.font = '20px "Nintendo DS BIOS"';
 
     this.ctx.fillText(`Level: ${level}`, this.InfoPanelX, this.InfoPanelY + 0);
-    this.ctx.fillText(`Score: ${level}`, this.InfoPanelX, this.InfoPanelY + 40);
-    this.ctx.fillText(`Lines: ${level}`, this.InfoPanelX, this.InfoPanelY + 80);
+    this.ctx.fillText(`Score: ${score}`, this.InfoPanelX, this.InfoPanelY + 40);
+    this.ctx.fillText(`Lines: ${lines}`, this.InfoPanelX, this.InfoPanelY + 80);
     this.ctx.fillText("Next:", this.InfoPanelX, this.InfoPanelY + 120);
+    this.ctx.fillText(
+      "Press ENTER for pause",
+      this.InfoPanelX,
+      this.InfoPanelY + 220
+    );
+    this.ctx.fillText("Author:", this.InfoPanelX, this.InfoPanelY + 580);
+    this.ctx.fillText(
+      "Konstantin Filyaev",
+      this.InfoPanelX,
+      this.InfoPanelY + 600
+    );
 
     for (let i = 0; i < nextTetromino.matrix.length; i++) {
       for (let j = 0; j < nextTetromino.matrix[i].length; j++) {
